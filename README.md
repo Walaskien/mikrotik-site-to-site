@@ -1,5 +1,7 @@
 # mikrotik-site-to-site
 
+[![ci](https://github.com/Walaskien/mikrotik-site-to-site/actions/workflows/ci.yml/badge.svg)](https://github.com/Walaskien/mikrotik-site-to-site/actions/workflows/ci.yml)
+
 Generate RouterOS 7 configuration for site-to-site links between two or more MikroTik routers, from one YAML file.
 
 Writing the same WireGuard peers, routes and firewall rules by hand on every router is slow, and the sites drift apart (one has the NAT rule in the wrong place, another forgot the MSS clamp). Here you describe the sites once and get one ready-to-review `.rsc` file per router.
@@ -51,8 +53,9 @@ Python 3.9.6, macOS:
 | `pytest -q` | 15 passed: input validation (each rejection above), deterministic output, golden `.rsc` files for the example, no `private-key` in output, per-site backup logic, CLI exit codes |
 | `ruff check .` | all checks passed |
 | `python -m s2s validate examples/three-sites.yml` | OK: 3 sites |
+| GitHub Actions (`ci`, run 42587344103, commit "Translate docs to English") | success: `ruff`, `pytest` and `validate` on Python 3.9 and 3.12 |
 
-**Not verified:** the generated configuration was not applied to RouterOS hardware or to a CHR virtual machine. The syntax was written against the RouterOS 7 documentation and not machine-checked. Treat the output as a reviewed starting point and test on spare equipment first. The failover timing in the design document is the expected behaviour of `check-gateway`, not a measurement. GitHub Actions has not run yet.
+**Not verified:** the generated configuration was not applied to RouterOS hardware or to a CHR virtual machine. The syntax was written against the RouterOS 7 documentation and not machine-checked. Treat the output as a reviewed starting point and test on spare equipment first. The failover timing in the design document is the expected behaviour of `check-gateway`, not a measurement.
 
 ## Limits
 
@@ -69,3 +72,8 @@ examples/        three-sites.yml  (documentation addresses, dummy keys)
 tests/           pytest + golden/*.rsc
 docs/design.md   topology, failover, firewall order, common mistakes
 ```
+
+## Related
+
+- [dual-homed-routing](https://github.com/Walaskien/dual-homed-routing): the same asymmetric-routing problem on a Linux host.
+- [ansible-linux-baseline](https://github.com/Walaskien/ansible-linux-baseline): baseline for the Linux servers behind these routers.
