@@ -1,0 +1,33 @@
+# Example input. All addresses are documentation ranges (RFC 5737) and private space;
+# keys are dummies. Replace them with your own values.
+tunnel:
+  primary_subnet: 10.255.1.0/24
+  backup_subnet: 10.255.2.0/24
+  primary_port: 13231
+  backup_port: 13232
+  mtu: 1420
+
+management_sources: [192.0.2.0/24]
+
+sites:
+  - name: hq
+    id: 1
+    lan: {interface: bridge-lan, address: 10.10.0.1/24}
+    wan: {interface: ether1, address: 203.0.113.2/30, gateway: 203.0.113.1}
+    backup_wan: {interface: ether2, address: 198.51.100.2/30, gateway: 198.51.100.1}
+    public_key: ZXhhbXBsZS1wdWJsaWMta2V5LWhxLXByaW1hcnktMDA=
+    backup_public_key: ZXhhbXBsZS1wdWJsaWMta2V5LWhxLWJhY2t1cC0wMDA=
+
+  - name: branch1
+    id: 2
+    lan: {interface: bridge-lan, address: 10.20.0.1/24}
+    wan: {interface: ether1, address: 203.0.113.6/30, gateway: 203.0.113.5}
+    backup_wan: {interface: ether2, address: 198.51.100.6/30, gateway: 198.51.100.5}
+    public_key: ZXhhbXBsZS1wdWJsaWMta2V5LWJyMS1wcmltYXJ5LTA=
+    backup_public_key: ZXhhbXBsZS1wdWJsaWMta2V5LWJyMS1iYWNrdXAtMDA=
+
+  - name: branch2
+    id: 3
+    lan: {interface: bridge-lan, address: 10.30.0.1/24}
+    wan: {interface: ether1, address: 203.0.113.10/30, gateway: 203.0.113.9}
+    public_key: ZXhhbXBsZS1wdWJsaWMta2V5LWJyMi1wcmltYXJ5LTA=
