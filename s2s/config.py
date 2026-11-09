@@ -104,10 +104,14 @@ def validate(raw):
             backup = _iface(s["backup_wan"], where + ".backup_wan", errors, need_gateway=True)
             _key(s.get("backup_public_key"), where + ".backup_public_key", errors)
         _key(s.get("public_key"), where + ".public_key", errors)
-        sites.append({"name": name, "id": sid, "lan": lan, "lan_if": (s.get("lan") or {}).get("interface"),
-                      "wan": wan, "wan_raw": s.get("wan") or {}, "backup": backup,
-                      "backup_raw": s.get("backup_wan") or {},
-                      "public_key": s.get("public_key"), "backup_public_key": s.get("backup_public_key")})
+        sites.append({
+            "name": name, "id": sid,
+            "lan": lan, "lan_if": (s.get("lan") or {}).get("interface"),
+            "wan": wan, "wan_raw": s.get("wan") or {},
+            "backup": backup, "backup_raw": s.get("backup_wan") or {},
+            "public_key": s.get("public_key"),
+            "backup_public_key": s.get("backup_public_key"),
+        })
 
     nets = [(s["name"], s["lan"].network) for s in sites if s["lan"]]
     for a in range(len(nets)):

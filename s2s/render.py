@@ -8,6 +8,10 @@ def _host(net, n):
     return str(net.network_address + n)
 
 
+def _with_prefix(net, n):
+    return "%s/%d" % (_host(net, n), net.prefixlen)
+
+
 def _peer_view(local, peer, tunnel):
     """What `local` needs to know about `peer`."""
     view = {
@@ -39,8 +43,8 @@ def build_context(cfg, site):
         "mgmt": cfg["management_sources"],
         "peers": peers,
         "has_backup": site["backup"] is not None,
-        "primary_ip": "%s/%d" % (_host(t["primary_subnet"], site["id"]), t["primary_subnet"].prefixlen),
-        "backup_ip": "%s/%d" % (_host(t["backup_subnet"], site["id"]), t["backup_subnet"].prefixlen),
+        "primary_ip": _with_prefix(t["primary_subnet"], site["id"]),
+        "backup_ip": _with_prefix(t["backup_subnet"], site["id"]),
         "peer_lans": [p["lan"] for p in peers],
     }
 
