@@ -61,7 +61,7 @@ Python 3.9.6, macOS:
 - One LAN per site, IPv4 only, no dynamic routing (OSPF/BGP), no DNS/DHCP/VLAN configuration.
 - Golden files must be updated deliberately when the template changes: `UPDATE_GOLDEN=1 pytest`.
 
-## Structure
+## Repository layout
 
 ```
 s2s/             config.py (validation), render.py, cli.py, templates/router.rsc.j2
@@ -69,7 +69,3 @@ examples/        three-sites.yml  (documentation addresses, dummy keys)
 tests/           pytest + golden/*.rsc
 docs/design.md   topology, failover, firewall order, common mistakes
 ```
-
-## Кратко по-русски
-
-Генератор конфигов RouterOS 7 для связи нескольких филиалов: на входе один YAML с сайтами, на выходе по `.rsc` на каждый роутер (WireGuard-полносвязка, резервный туннель по второму каналу, маршруты с `distance` и `check-gateway`, firewall, NAT, MSS). Есть `validate`, тесты и golden-файлы. Конфиги на реальном MikroTik или CHR не применялись, синтаксис сверен с документацией RouterOS 7. В `docs/design.md` описан порядок правил и типичные ошибки (MTU/MSS, NAT, асимметричная маршрутизация).
