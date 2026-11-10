@@ -73,6 +73,13 @@ tests/           pytest + golden/*.rsc
 docs/design.md   topology, failover, firewall order, common mistakes
 ```
 
+## What I would improve next
+
+- Import the generated files on a RouterOS CHR virtual machine and record the result. This was not done: CHR is a proprietary image that has to be downloaded from MikroTik, and it was not downloaded or run here.
+- Check the `.rsc` syntax automatically (for example by importing into CHR in CI).
+- Hubs behind NAT and dynamic addresses.
+- OSPF or BGP instead of static routes with `check-gateway`.
+
 ## Related
 
 - [dual-homed-routing](https://github.com/Walaskien/dual-homed-routing): the same asymmetric-routing problem on a Linux host.
