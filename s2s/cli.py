@@ -2,6 +2,8 @@ import argparse
 import os
 import sys
 
+import yaml
+
 from .config import ConfigError, load
 from .render import render_all
 
@@ -19,6 +21,9 @@ def main(argv=None):
         cfg = load(a.config)
     except ConfigError as exc:
         print("Invalid config:\n%s" % exc, file=sys.stderr)
+        return 1
+    except (OSError, yaml.YAMLError) as exc:
+        print("Cannot read %s: %s" % (a.config, exc), file=sys.stderr)
         return 1
     if a.cmd == "validate":
         print("OK: %d sites" % len(cfg["sites"]))

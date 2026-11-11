@@ -111,3 +111,14 @@ def test_cli_reports_invalid_config(tmp_path, capsys):
     p.write_text("sites: []\n")
     assert main(["validate", str(p)]) == 1
     assert "Invalid config" in capsys.readouterr().err
+
+
+def test_malformed_values_are_reported_not_raised():
+    assert "must be a mapping" in bad(lambda r: r["sites"].append("hq2"))
+    assert "tunnel.mtu" in bad(lambda r: r["tunnel"].update(mtu="abc"))
+    assert "name must match" in bad(lambda r: r["sites"][1].update(name=["x"]))
+
+
+def test_cli_missing_file(tmp_path, capsys):
+    assert main(["validate", str(tmp_path / "nope.yml")]) == 1
+    assert "Cannot read" in capsys.readouterr().err

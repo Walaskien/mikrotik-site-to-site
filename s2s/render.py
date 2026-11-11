@@ -21,7 +21,6 @@ def _peer_view(local, peer, tunnel):
             "key": peer["public_key"],
             "endpoint": str(peer["wan"].ip),
             "tunnel_ip": _host(tunnel["primary_subnet"], peer["id"]),
-            "gateway": str(peer["wan"].network.network_address),
         },
         "backup": None,
     }

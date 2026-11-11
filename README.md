@@ -38,7 +38,7 @@ python -m s2s validate mysites.yml          # checks the input, writes nothing
 python -m s2s generate mysites.yml -o out   # out/<site>.rsc
 ```
 
-Then, per router: take a `/system backup`, upload the file, run `/import file-name=<site>.rsc`. The file assumes the router has no conflicting WAN/LAN addresses, firewall or WireGuard configuration; it is meant for a new or cleaned router, not for merging into a running production config.
+Then, per router: take a `/system backup`, upload the file, run `/import file-name=<site>.rsc`. The file assumes the router has no conflicting WAN/LAN addresses, firewall or WireGuard configuration; it is meant for a new or cleaned router, not for merging into a router that is already in use.
 
 Public keys: the first import creates the WireGuard interfaces and their keys. Read them with `/interface/wireguard print`, put them in the YAML (`public_key`, `backup_public_key`), regenerate, and re-import on a clean router (or add the peers by hand).
 
@@ -50,10 +50,10 @@ Python 3.9.6, macOS:
 
 | Check | Result |
 |---|---|
-| `pytest -q` | 15 passed: input validation (each rejection above), deterministic output, golden `.rsc` files for the example, no `private-key` in output, per-site backup logic, CLI exit codes |
+| `pytest -q` | 17 passed: input validation (each rejection above), deterministic output, golden `.rsc` files for the example, no `private-key` in output, per-site backup logic, malformed input, CLI exit codes |
 | `ruff check .` | all checks passed |
 | `python -m s2s validate examples/three-sites.yml` | OK: 3 sites |
-| GitHub Actions (`ci`, run 42587344103, commit "Translate docs to English") | success: `ruff`, `pytest` and `validate` on Python 3.9 and 3.12 |
+| GitHub Actions (see the badge) | `ruff`, `pytest` and `validate` on Python 3.9 and 3.12 |
 
 **Not verified:** the generated configuration was not applied to RouterOS hardware or to a CHR virtual machine. The syntax was written against the RouterOS 7 documentation and not machine-checked. Treat the output as a reviewed starting point and test on spare equipment first. The failover timing in the design document is the expected behaviour of `check-gateway`, not a measurement.
 

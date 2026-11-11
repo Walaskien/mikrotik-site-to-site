@@ -45,6 +45,14 @@ def _key(value, where, errors):
         errors.append("%s: not a WireGuard public key (base64 of 32 bytes)" % where)
 
 
+def _int(value, default, where, errors):
+    try:
+        return int(value if value is not None else default)
+    except (TypeError, ValueError):
+        errors.append("%s: must be an integer" % where)
+        return default
+
+
 def load(path):
     with open(path) as fh:
         raw = yaml.safe_load(fh)
@@ -58,9 +66,9 @@ def validate(raw):
         raise ConfigError("top level must be a mapping")
 
     t = raw.get("tunnel") or {}
-    tunnel = {"mtu": int(t.get("mtu", 1420)),
-              "primary_port": int(t.get("primary_port", 13231)),
-              "backup_port": int(t.get("backup_port", 13232))}
+    tunnel = {"mtu": _int(t.get("mtu"), 1420, "tunnel.mtu", errors),
+              "primary_port": _int(t.get("primary_port"), 13231, "tunnel.primary_port", errors),
+              "backup_port": _int(t.get("backup_port"), 13232, "tunnel.backup_port", errors)}
     for kind in ("primary", "backup"):
         try:
             tunnel[kind + "_subnet"] = ipaddress.ip_network(t.get(kind + "_subnet"))
@@ -84,10 +92,14 @@ def validate(raw):
         errors.append("sites: need a list of at least two sites")
         raw_sites = []
     for i, s in enumerate(raw_sites):
+        if not isinstance(s, dict):
+            errors.append("sites[%d]: must be a mapping" % i)
+            continue
         name = s.get("name", "")
         where = "sites[%d] (%s)" % (i, name)
-        if not NAME_RE.match(str(name)):
+        if not isinstance(name, str) or not NAME_RE.match(name):
             errors.append("%s: name must match %s" % (where, NAME_RE.pattern))
+            name = str(name)
         if name in names:
             errors.append("%s: duplicate name" % where)
         names.add(name)
